@@ -70,13 +70,13 @@ mode_colours <- c("pedestrian" = '#99d8c9',
 
 ```
 
-# Look at the exposure of PA/AP
+# Exposure Analysis: PA and AP
 
-In this section, we will develop a better understanding of PA and AP exposures by age and sex groups.
+This section provides a comprehensive examination of physical activity (PA) and air pollution (AP) exposures across age and sex groups.
 
 ## PA distribution by Scenario, Age Category and Sex
 
-Let's plot PA volume, as outputted from the model, for each scenario, age category and sex group.
+The following analysis presents the distribution of PA volume, as output from the model, stratified by scenario, age category and sex group.
 
 ```{r}
 
@@ -111,9 +111,9 @@ plotly::ggplotly(ggplot(mmets_long, aes(x = age_cat, y = mmet_value, fill = scen
 
 ```
 
-## AP distribution by Scenario, Age Category and Sex
+## AP Distribution by Scenario, Age Category and Sex
 
-Similar to PA plot, let's plot AP exposure (of PM 2.5 in µg/m³ ), as outputted from the model, for each scenario, age category and sex group.
+Analogous to the PA analysis, the following presents AP exposure (PM 2.5 in µg/m³), as output from the model, stratified by scenario, age category and sex group.
 
 ```{r}
 
@@ -148,11 +148,11 @@ plotly::ggplotly(ggplot(pm_2.5_long, aes(x = age_cat, y = pm_2.5_value, fill = s
 
 ```
 
-### Example of travel behaviour of an individual
+### Individual Travel Behaviour Example
 
-We'd now like to look at a random participant whose PA volume has reduced in the `cycling` scenario. This allows us to make sense of which trips were switched to `cycle` mode, and how they might have an effect on the person's PA volume. Spend 10 minutes making sense of the trips.
+The following analysis examines a randomly selected participant whose PA volume has decreased under the `cycling` scenario. This enables identification of trips that were switched to `cycle` mode and an assessment of their impact on the individual's PA volume. Approximately 10 minutes should be devoted to examining the trip modifications.
 
-You may also change the `seed` to another number to pick a different participant.
+The `seed` parameter may be modified to select an alternative participant.
 
 ```{r}
 set.seed(2)
@@ -169,13 +169,13 @@ trip_sample_participant
 
 ```
 
-## Calculate exposure response/dose response against dose
+## Exposure-Response and Dose-Response Calculations
 
-In this section, we calculate exposure response/dose response against behaviours for each individual for both AP and PA.
+This section presents the calculation of exposure-response and dose-response relationships against behaviours for each individual, encompassing both AP and PA.
 
-### PA dose
+### PA Dose-Response
 
-We are using `all-cause-mortality` dose-response relationship.
+The `all-cause-mortality` dose-response relationship is applied in this analysis.
 
 [![All cause mortality dose-response curve](images/all-cause-dose-response.png){fig-align="center"}](https://shiny.mrc-epid.cam.ac.uk/meta-analyses-physical-activity/)
 
@@ -198,9 +198,9 @@ RR_pa
 
 ```
 
-### AP
+### AP Exposure-Response
 
-Similar to PA, we will use `all-cause-mortality` exposure response function for AP as well.
+Analogous to the PA analysis, the `all-cause-mortality` exposure-response function is applied to AP.
 
 ```{r}
 
@@ -220,7 +220,7 @@ ggplot(all_cause_ap) +
 
 ```
 
-Using the `ERF` above, we now calculate relative risk against `pm 2.5` exposure for `all-cause-mortality`
+Using the `ERF` presented above, the relative risk against `pm 2.5` exposure for `all-cause-mortality` is calculated.
 
 ```{r}
 
@@ -236,9 +236,9 @@ RR_ap <- io$bogota$outcomes$pm_conc_pp |> tidyr::pivot_longer(cols = contains("p
 head(RR_ap)
 ```
 
-### Combined AP and PA
+### Combined AP and PA Relative Risk
 
-Let's combine PA and AP relative risk together in a dataset.
+PA and AP relative risk values are combined within a single dataset.
 
 ```{r}
 
@@ -248,9 +248,9 @@ combined_RR
 
 ```
 
-### Multiply RRs of PA and AP combined
+### Combined PA and AP Relative Risk
 
-In order to have a joint effect of `PA` and `AP`, we multiply their respective relative risks together.
+To quantify the joint effect of `PA` and `AP`, their respective relative risks are multiplied together.
 
 ```{r}
 
@@ -259,9 +259,9 @@ combined_RR <- combined_RR |> mutate(rr = rr_ap * rr_pa )
 combined_RR
 ```
 
-### Age and sex grouped combined RRs
+### Age and Sex Stratified Combined RRs
 
-Similar to previous exercises, we'd now look at the `sum` of relative risk by `age_cat` and `sex`.
+Following the approach established in prior exercises, the aggregate sum of relative risk is calculated by `age_cat` and `sex`.
 
 ```{r}
 
@@ -272,9 +272,9 @@ grouped_RR
 
 ```
 
-# PIF
+# Potential Impact Fraction (PIF)
 
-Using the combined relative risk by `age_cat`, and `sex`, we calculate Potential Impact Fraction. Just to remind you
+Using the combined relative risk stratified by `age_cat` and `sex`, the Potential Impact Fraction is calculated as follows:
 
 $$
 pif = \frac{RR_{base} - RR_{scenario}}{RR_{base}}
@@ -288,9 +288,9 @@ pif
 
 ```
 
-## Read in the burden data from io
+## Disease Burden Data
 
-The city specific burden data - which usually comes from the [Global Burden of Disease (GBD)](https://www.healthdata.org/research-analysis/gbd), is stored at `io$bogota$disease_burden`.
+City-specific burden data, typically sourced from the [Global Burden of Disease (GBD)](https://www.healthdata.org/research-analysis/gbd) database, is stored at `io$bogota$disease_burden`.
 
 ```{r}
 
@@ -300,9 +300,9 @@ hb
 
 ```
 
-### Keep only relevant causes
+### Filtering for Relevant Causes
 
-Filter only `All causes` as the `cause` and keep only `Deaths` as measure.
+The data is filtered to retain only `All causes` as the `cause` variable and `Deaths` as the measure.
 
 ```{r}
 
@@ -314,9 +314,9 @@ hb
 
 # Health Impacts
 
-## Estimate the health impact using PIFs and burden data
+## Health Impact Estimation Using PIFs and Burden Data
 
-Multiply PIF for each `age_cat` (5 year age category) and `sex` with burden data to calculate health burden under each scenario.
+The PIF for each `age_cat` (5-year age category) and `sex` is multiplied by the burden data to calculate the health burden under each scenario.
 
 ```{r}
 
@@ -331,9 +331,9 @@ health_impact
 
 ```
 
-## Total number of averted deaths under each scenario
+## Total Averted Deaths by Scenario
 
-Sum the health impact of each scenario to calculate total number of averted deaths, and display it. Positive value means the deaths were averted, while negative value means they were lost.
+The health impact for each scenario is aggregated to calculate the total number of averted deaths. Positive values indicate deaths averted, whereas negative values indicate deaths attributable to the scenario.
 
 ```{r}
 
