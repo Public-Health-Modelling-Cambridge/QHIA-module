@@ -146,17 +146,17 @@ These categories are derived from domain expertise and empirical distance distri
           title = "Distribution of distance (km) by mode \n\n") +
      theme_minimal()) |> 
   plotly::add_annotations(text="2 km",
-                  x = 1.2, 
-                  y = 0, 
-                  showarrow = TRUE,
+                  x = 1.5, 
+                  y = 1, 
+                  showarrow = F,
                   textangle = -90, 
-                  font=list(size = 10)) |> 
+                  font=list(size = 12)) |> 
   plotly::add_annotations(text="6 km",
-                  x = 5.2, 
-                  y = 0, 
-                  showarrow = TRUE,
+                  x = 5.5, 
+                  y = 1, 
+                  showarrow = F,
                   textangle = -90, 
-                  font = list(size = 10))
+                  font = list(size = 12))
 ```
 
 ### Table with distance categories
