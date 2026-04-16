@@ -1,5 +1,5 @@
 ---
-title: "Practicals: lecture 2"
+title: "Practicals: lecture 3a"
 subtitle: "Creating scenarios"
 author: "Ali Abbas"
 engine: knitr
@@ -12,7 +12,7 @@ format:
     embed-resources: true
     toc: true
     code-tools: true
-    code-fold: false
+    code-fold: true
     page-layout: full
     df-print: paged
     number-sections: true
@@ -117,8 +117,7 @@ trip_dist |>
 
 The bus mode exhibits the highest share at `r round(trip_dist$bus * 100, 1)`(%), while the other category demonstrates the lowest share at `r round(trip_dist$other * 100, 1)`(%).
 
-::: {.callout-tip title="Quick Quiz" appearance="minimal"}
-
+::::: {.callout-tip title="Quick Quiz" appearance="minimal"}
 ### Question 1: Mode with Highest Share
 
 Based on the percentage distribution table above, which travel mode has the **highest share** of trips?
@@ -153,10 +152,10 @@ q1_mode_feedback = {
 ```
 
 ::: {style="margin-top: 1rem;"}
-${q1_mode_feedback}
+\${q1_mode_feedback}
 :::
 
----
+------------------------------------------------------------------------
 
 ### Question 2: Combined Mode Share
 
@@ -187,11 +186,9 @@ q2_combined_feedback = {
 ```
 
 ::: {style="margin-top: 1rem;"}
-${q2_combined_feedback}
+\${q2_combined_feedback}
 :::
-
-:::
-
+:::::
 
 ### Distribution using Cumulative Distribution Function (CDF)
 
@@ -296,7 +293,123 @@ To increase the `cycling` mode share by `5%` of all trips, the following convers
 
 - Overall, this leads to an increase of `(5% x 80% / 60%) x 60%` + `(5% x 20% / 40%) * 40%` = `5%` of cycling trips, whilst preserving the cycling mode shares of `80%` in distance band `A` and `20%` in distance band `B` and preserving the total mode shares of `60%` in distance band `A` and `40%` in distance band `B`. The total number of trips is also preserved.
 
-# Create a Pedestrian Scenario
+:::::: {.callout-tip title="Quick Quiz: 10% Cycling Scenario" appearance="minimal"}
+Based on the example above, let's extend the scenario to achieve a **10%** increase in cycling mode share using the same parameters: - Distance band A: 60% of all trips, 80% of cycling trips - Distance band B: 40% of all trips, 20% of cycling trips
+
+------------------------------------------------------------------------
+
+### Question 1: Band A Conversion
+
+**To achieve a 10% increase in cycling mode share, what percentage of non-cycling trips in distance band A must be converted to cycling?**
+
+*Hint: The formula is: (target increase × cycling share in band A) / (total trips in band A)*
+
+```{ojs}
+//| echo: false
+viewof q10_a_answer = Inputs.radio(
+  ["a", "b", "c", "d"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      a: "6.67% (using the 5% formula)",
+      b: "13.33% ((10% × 80%) / 60%)",
+      c: "10.00% (the target increase)",
+      d: "16.67% ((10% × 100%) / 60%)"
+    })[x]
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+q10_a_feedback = {
+  if (q10_a_answer == null) return html`<i>Please select one option.</i>`;
+  return q10_a_answer === "b"
+    ? html`<span style="color: green; font-weight: bold;">Correct! (10% × 80%) / 60% = 13.33% of non-cycling trips in band A must be converted.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. The correct formula is (10% × 80%) / 60% = 13.33%. This converts 13.33% of non-cycling trips in band A to cycling.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q10_a_feedback}
+:::
+
+------------------------------------------------------------------------
+
+### Question 2: Band B Calculation
+
+**Calculate the percentage of non-cycling trips in distance band B that must be converted to cycling for a 10% increase. Round your answer to two decimal places.**
+
+*Hint: Use the formula (10% × cycling share in band B) / (total trips in band B)*
+
+```{ojs}
+//| echo: false
+viewof q10_b_input = Inputs.text({
+  value: "",
+  placeholder: "Enter percentage (e.g., 5.00)",
+  label: html`<b></b>`
+})
+```
+
+```{ojs}
+//| echo: false
+q10_b_answer = 5.00;
+
+q10_b_feedback = {
+  if (q10_b_input.trim() === "") return html`<i>Please enter a value.</i>`;
+  const userValue = parseFloat(q10_b_input);
+  if (isNaN(userValue)) return html`<span style="color: red;">Please enter a valid number.</span>`;
+  const isCorrect = Math.abs(userValue - q10_b_answer) <= 0.1;
+  return isCorrect
+    ? html`<span style="color: green; font-weight: bold;">Correct! (10% × 20%) / 40% = 5.00% of non-cycling trips in band B must be converted.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. The formula is (10% × 20%) / 40% = 5.00%. 5.00% of non-cycling trips in band B need to convert to cycling.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q10_b_feedback}
+:::
+
+------------------------------------------------------------------------
+
+### Question 3: Preservation Check
+
+**If the 10% cycling increase is successful whilst preserving the intra-band cycling distribution, what happens to the cycling mode share within distance band A?**
+
+*Hint: The conversion changes the mode share of cycling in each band, but preserves the relative distribution of cycling trips across distance bands.*
+
+```{ojs}
+//| echo: false
+viewof q10_c_answer = Inputs.radio(
+  ["a", "b", "c", "d"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      a: "It increases to 88% (80% + 10%)",
+      b: "It remains at 80%",
+      c: "It increases to 90% (80% × 1.1)",
+      d: "It decreases to 72% (80% − 10%)"
+    })[x]
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+q10_c_feedback = {
+  if (q10_c_answer == null) return html`<i>Please select one option.</i>`;
+  return q10_c_answer === "b"
+    ? html`<span style="color: green; font-weight: bold;">Correct! The intra-band cycling distribution is preserved at 80% in band A and 20% in band B. Only the overall cycling mode share (across all trips) increases by 10%.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. The intra-band cycling distribution is preserved. Within band A, 80% of cycling trips remain in band A - this proportion doesn't change. The 10% increase refers to the overall cycling mode share across all trips.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q10_c_feedback}
+:::
+::::::
 
 This exercise demonstrates scenario creation independent of the `ithimr` package. Having established a comprehensive understanding of trip modes and their associated distances, this section modifies selected trips and quantifies the resulting impact on physical activity. The analysis focuses on:
 
