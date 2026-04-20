@@ -106,7 +106,7 @@ RR   <- 1.27   # Relative risk inactive vs active (all-cause mortality)
 # --- PIF formula (Barendregt & Veerman, 2010) ---
 PIF <- (p * (RR - 1) - p_cf * (RR - 1)) / (p * (RR - 1) + 1)
 
-cat("PIF =", round(PIF, 4), "\n")
+cat("PIF =", round(PIF, 8), "\n")
 cat("PIF (%) =", round(PIF * 100, 2), "%\n")
 ```
 
