@@ -1,5 +1,5 @@
 ---
-title: "Practicals: lecture 3a"
+title: "Practicals: lecture 3"
 subtitle: "Creating scenarios"
 author: "Ali Abbas"
 editor: visual
@@ -862,7 +862,6 @@ plotly::ggplotly(
 
 ```
 
-
 # Part B: Learning objectives:
 
 - Starting from behaviours, calculate exposures for baseline and scenarios
@@ -1069,268 +1068,189 @@ health_impact |> group_by(scenario) |> summarise(averted_deaths = sum(health_imp
 
 ```
 
-# Quiz
+## Quiz
 
 Test your understanding of exposure analysis, dose-response relationships, and health impact assessment.
 
-## Question 1: Exposure Units
-
-**What unit is used for measuring PM2.5 (air pollution) exposure?**
-
-- 
-
-  A)  mg/m³
-
-- 
-
-  B)  µg/m³
-
-- 
-
-  C)  ppm
-
-- 
-
-  D)  mg/L
-
-::: webr
-```{{r}}
-# PM2.5 exposure is measured in micrograms per cubic meter
-cat("Answer: B) µg/m³", "\n")
-cat("PM2.5 exposure is measured in micrograms per cubic meter (µg/m³).")
-```
-:::
-
-------------------------------------------------------------------------
-
-## Question 2: Dose-Response Function
+::::: {.callout-tip title="Quick Quiz" appearance="minimal"}
+### Question 1: Dose-Response Function
 
 **Which cause is used for the physical activity dose-response relationship in this practical?**
 
-- 
-
-  A)  Cardiovascular disease
-
-- 
-
-  B)  Respiratory disease
-
-- 
-
-  C)  All-cause mortality
-
-- 
-
-  D)  Cancer
-
-::: webr
-```{{r}}
-# The dose-response function uses all-cause mortality
-cause <- "all-cause-mortality"
-cat("Answer: C)", cause, "\n")
-cat("The practical uses the all-cause mortality dose-response relationship.")
+```{ojs}
+//| echo: false
+viewof q1_dose_answer = Inputs.radio(
+  ["A", "B", "C", "D"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      A: "Cardiovascular disease",
+      B: "Respiratory disease",
+      C: "All-cause mortality",
+      D: "Cancer"
+    })[x]
+  }
+)
 ```
+
+```{ojs}
+//| echo: false
+q1_dose_feedback = {
+  if (q1_dose_answer == null) return html`<i>Please select one option.</i>`;
+  return q1_dose_answer === "C"
+    ? html`<span style="color: green; font-weight: bold;">Correct! The dose-response uses all-cause mortality.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. Try again.</span>`;
+}
+
+```
+
+::: {style="margin-top: 1rem;"}
+\${q1_dose_feedback}
 :::
 
-------------------------------------------------------------------------
-
-## Question 3: RR Calculation
-
-**Which function is used to calculate relative risk (RR) from a dose-response relationship for PA?**
-
-- 
-
-  A)  `AP_dose_response()`
-
-- 
-
-  B)  `dose_response()` from drpa package
-
-- 
-
-  C)  `pivot_longer()`
-
-- 
-
-  D)  `summarise()`
-
-::: webr
-```{{r}}
-# Functions used for dose-response calculations
-cat("Answer: B) dose_response() from drpa package", "\n")
-cat("This function calculates RR based on cause, outcome type, dose, and censor method.")
-```
-:::
-
-------------------------------------------------------------------------
-
-## Question 4: Combined Relative Risk
-
-**How are PA and AP relative risks combined in this practical?**
-
-- 
-
-  A)  Added together (RR_ap + RR_pa)
-
-- 
-
-  B)  Subtracted (RR_ap - RR_pa)
-
-- 
-
-  C)  Multiplied (RR_ap × RR_pa)
-
-- 
-
-  D)  Averaged ((RR_ap + RR_pa) / 2)
-
-::: webr
-```{{r}}
-# Combined RR calculation
-rr_ap <- 1.2
-rr_pa <- 0.8
-combined_rr <- rr_ap * rr_pa
-cat("RR_ap:", rr_ap, "\n")
-cat("RR_pa:", rr_pa, "\n")
-cat("Combined RR = RR_ap × RR_pa =", combined_rr, "\n")
-cat("Answer: C) Multiplied (RR_ap × RR_pa)")
-```
-:::
-
-------------------------------------------------------------------------
-
-## Question 5: PIF Formula
+### Question 2: PIF Formula
 
 **In the PIF formula, what does a positive PIF value indicate?**
 
 $$pif = \frac{RR_{base} - RR_{scenario}}{RR_{base}}$$
 
-- 
-
-  A)  Deaths attributable to the scenario (more deaths)
-
-- 
-
-  B)  Deaths averted by the scenario (fewer deaths)
-
-- 
-
-  C)  No change in deaths
-
-- 
-
-  D)  Invalid calculation
-
-::: webr
-```{{r}}
-# PIF formula interpretation
-rr_base <- 100
-rr_scenario <- 85
-pif <- (rr_base - rr_scenario) / rr_base
-cat("RR_base:", rr_base, "\n")
-cat("RR_scenario:", rr_scenario, "\n")
-cat("PIF = (", rr_base, "-", rr_scenario, ")", "/", rr_base, "=", round(pif, 2), "\n")
-cat("Answer: B) Deaths averted by the scenario", "\n")
-cat("A positive PIF means the scenario RR is lower than baseline, indicating fewer deaths.")
+```{ojs}
+//| echo: false
+viewof q2_pif_answer = Inputs.radio(
+  ["A", "B", "C", "D"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      A: "Deaths attributable to the scenario (more deaths)",
+      B: "Deaths averted by the scenario (fewer deaths)",
+      C: "No change in deaths",
+      D: "Invalid calculation"
+    })[x]
+  }
+)
 ```
+
+```{ojs}
+//| echo: false
+q2_pif_feedback = {
+  if (q2_pif_answer == null) return html`<i>Please select one option.</i>`;
+  return q2_pif_answer === "B"
+    ? html`<span style="color: green; font-weight: bold;">Correct! Positive PIF means deaths averted.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. Try again.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q2_pif_feedback}
 :::
 
-------------------------------------------------------------------------
-
-## Question 6: PIF Sign Interpretation
+### Question 3: PIF Sign Interpretation
 
 **If a cycling scenario has a PIF of +0.15, what does this mean?**
 
-- 
-
-  A)  15% more deaths under cycling scenario
-
-- 
-
-  B)  15% fewer deaths under cycling scenario
-
-- 
-
-  C)  15 additional deaths
-
-- 
-
-  D)  The scenario has no effect
-
-::: webr
-```{{r}}
-# PIF interpretation example
-pif_value <- 0.15
-cat("PIF =", pif_value, "\n")
-cat("Answer: B) 15% fewer deaths under cycling scenario", "\n")
-cat("A PIF of +0.15 means 15% of deaths are averted by the intervention.")
+```{ojs}
+//| echo: false
+viewof q3_pif_sign_answer = Inputs.radio(
+  ["A", "B", "C", "D"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      A: "15% more deaths under cycling scenario",
+      B: "15% fewer deaths under cycling scenario",
+      C: "15 additional deaths",
+      D: "The scenario has no effect"
+    })[x]
+  }
+)
 ```
+
+```{ojs}
+//| echo: false
+q3_pif_sign_feedback = {
+  if (q3_pif_sign_answer == null) return html`<i>Please select one option.</i>`;
+  return q3_pif_sign_answer === "B"
+    ? html`<span style="color: green; font-weight: bold;">Correct! +0.15 PIF means 15% fewer deaths.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. Try again.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q3_pif_sign_feedback}
 :::
 
-------------------------------------------------------------------------
+### Question 4: Disease Burden Data
 
-## Question 7: Disease Burden Data
 
 **Where is the city-specific disease burden data sourced from?**
 
-- 
-
-  A)  WHO mortality database
-
-- 
-
-  B)  Local hospital records
-
-- 
-
-  C)  Global Burden of Disease (GBD) database
-
-- 
-
-  D)  Insurance claims data
-
-::: webr
-```{{r}}
-# Disease burden data source
-data_source <- "Global Burden of Disease (GBD) database"
-cat("Answer: C)", data_source, "\n")
-cat("The practical explicitly mentions data is sourced from the GBD database.")
+```{ojs}
+//| echo: false
+viewof q4_disease_answer = Inputs.radio(
+  ["A", "B", "C", "D"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      A: "WHO mortality database",
+      B: "Local hospital records",
+      C: "Global Burden of Disease (GBD) database",
+      D: "Insurance claims data"
+    })[x]
+  }
+)
 ```
+
+```{ojs}
+//| echo: false
+q4_disease_feedback = {
+  if (q4_disease_answer == null) return html`<i>Please select one option.</i>`;
+  return q4_disease_answer === "C"
+    ? html`<span style="color: green; font-weight: bold;">Correct! Data is from GBD database.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. Try again.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q4_disease_feedback}
 :::
 
-------------------------------------------------------------------------
-
-## Question 8: Health Impact Calculation
+### Question 5: Health Impact Calculation
 
 **What is multiplied by the PIF to calculate health impact?**
 
-- 
-
-  A)  Relative risk
-
-- 
-
-  B)  Population exposure
-
-- 
-
-  C)  Disease burden
-
-- 
-
-  D)  Dose-response coefficient
-
-::: webr
-```{{r}}
-# Health impact calculation
-pif <- 0.10
-burden <- 1500
-health_impact <- pif * burden
-cat("PIF:", pif, "\n")
-cat("Disease burden:", burden, "deaths", "\n")
-cat("Health impact = PIF × burden =", health_impact, "averted deaths", "\n")
-cat("Answer: C) Disease burden")
+```{ojs}
+//| echo: false
+viewof q5_health_impact_answer = Inputs.radio(
+  ["A", "B", "C", "D"],
+  {
+    value: null,
+    label: html`<b></b>`,
+    format: x => ({
+      A: "Relative risk",
+      B: "Population exposure",
+      C: "Disease burden",
+      D: "Dose-response coefficient"
+    })[x]
+  }
+)
 ```
+
+```{ojs}
+//| echo: false
+  q5_health_impact_feedback = {   if (q5_health_impact_answer == null) return html`<i>Please select one option.</i>`;   
+  return q5_health_impact_answer === "C" 
+  
+  return q4_disease_answer === "C"
+    ? html`<span style="color: green; font-weight: bold;">Correct! PIF × disease burden gives health impact.</span>`
+    : html`<span style="color: red; font-weight: bold;">Incorrect. Try again.</span>`;
+}
+```
+
+::: {style="margin-top: 1rem;"}
+\${q5_health_impact_feedback}
 :::
 
----\`\`\`
+------------------------------------------------------------------------
