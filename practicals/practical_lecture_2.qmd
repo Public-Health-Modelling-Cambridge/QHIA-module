@@ -305,25 +305,22 @@ RR_women_vec <- c(RR_women, 1)
 PIF_men_scenario   <- (sum(p_obs_men * RR_men_vec) - sum(p_cf_men * RR_men_vec)) / sum(p_obs_men * RR_men_vec)
 PIF_women_scenario <- (sum(p_obs_women * RR_women_vec) - sum(p_cf_women * RR_women_vec)) / sum(p_obs_women * RR_women_vec)
 
-attr_men_scenario   <- round(PIF_men_scenario   * deaths_men_2023)
-attr_women_scenario <- round(PIF_women_scenario * deaths_women_2023)
+prevented_men_scenario   <- round(PIF_men_scenario   * deaths_men_2023) 
+prevented_women_scenario <- round(PIF_women_scenario * deaths_women_2023)
 
 attr_men_2023   <- results$attr_men[results$year   == 2023]
 attr_women_2023 <- results$attr_women[results$year == 2023]
 
-prevented_men   <- attr_men_2023   - attr_men_scenario
-prevented_women <- attr_women_2023 - attr_women_scenario
 
 cat("--- 2023 results ---\n")
-cat("Attributable deaths (observed prevalence) — Men:", attr_men_2023,     " Women:", attr_women_2023,     "\n")
-cat("Attributable deaths (scenario prevalence) — Men:", attr_men_scenario, " Women:", attr_women_scenario, "\n")
-cat("Deaths prevented                            — Men:", prevented_men,       " Women:", prevented_women,       "\n")
+cat("Attributable deaths to smoking (avoidable if no smoking) — Men:", attr_men_2023,     " Women:", attr_women_2023,     "\n")
+cat("Avoidable deaths for reduction in smoking — Men:", prevented_men_scenario, " Women:", prevented_women_scenario, "\n")
 ```
 
 ::::: {.callout-tip title="Quick Quiz" appearance="minimal"}
 ### Question 2.1: Total Deaths Prevented
 
-Under the accelerated decline scenario, how many **total** IHD deaths were prevented in 2023?
+Under the accelerated decline scenario, how many **total** IHD deaths could had been prevented in 2023?
 
 ```{ojs}
 //| echo: false
@@ -333,7 +330,7 @@ viewof q2_1_answer = Inputs.text({
   label: html`<b></b>`
 })
 
-q2_1_correct = 832;
+q2_1_correct = 345;
 
 q2_1_feedback = {
   if (q2_1_answer.trim() === "") return html`<i>Please enter a value.</i>`;
@@ -382,22 +379,7 @@ q2_2_feedback = {
 :::
 :::::
 
-## Step 4: Plot observed vs scenario
 
-```{r q2-plot, fig.width=7, fig.height=5}
-heights <- c(attr_men_2023, attr_men_scenario, attr_women_2023, attr_women_scenario)
-cols    <- c("#1E3A5F", "#7BA7C7", "#2A9D8F", "#8FD4CA")
-labels  <- c("Men\n(observed)", "Men\n(scenario)", "Women\n(observed)", "Women\n(scenario)")
-
-bp <- barplot(heights,
-              names.arg = labels,
-              col = cols, border = NA,
-              ylab = "Smoking-attributable IHD deaths",
-              main = "Observed vs. accelerated-decline scenario, 2023\nEngland, ages 50–59",
-              ylim = c(0, max(heights) * 1.25))
-
-text(x = bp, y = heights + 15, labels = heights, cex = 0.9)
-```
 
 > **Q2.1** How many IHD deaths would have been prevented in 2023 if smoking had declined twice as fast since 2012? Express this as a percentage of total IHD deaths in this age group in 2023.
 
